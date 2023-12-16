@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin:0;
+            box-sizing: border-box;
+        }
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 20px;
+            height: 50vh;
+            margin-top: 50px;
+        }
+        #box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .image-box{
+            width: 800px;
+            height: 400px;
+            overflow: hidden;
+        }
+        .image {
+            width: 100%;
+            object-fit: cover;
+            display: none;
+        }
+        .arrow {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            margin-top: -22px;
+            color: #ff4a4a;
+            border-color: transparent;
+            border: none;
+            font-size: 18px;
+            transition: 0.6s ease;
+        }
+        .next-img {
+            right: 0;
+            border-radius: 5px;
+            background-color: #566;
+        }
+        .prev-img {
+            left: 0;
+            border-radius: 5px;
+            background-color: #566;
+        }
+        .next-img:hover, .prev-img:hover {
+            background-color: #ffffffcc;
+        }
+        .block {
+            display: block;
+        }
+        .circle {
+            height: 15px;
+            width: 15px;
+            border: 1px solid #000;
+            border-radius: 50%;
+            background-color: #000;
+            transition: background-color 0.5s;
+        }
+        .active, circle:hover {
+            background-color: #515151;
+        }
+        .radio {
+            display: flex;
+            column-gap: 20px;
+        }
+        .radio-box {
+            display: flex;
+            gap: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Контейнер изображений -->
+    <div class="container">
+        <div id="box">
+            <div class="image-box">
+                <img id="img1" src="img/1.png" alt="canon25x" class="image block fade">
+                <img id="img2" src="img/2.png" alt="sony" class="image fade">
+                <img id="img3" src="img/3.png" alt="canonIXU5" class="image fade">
+                <img id="img4" src="img/4.png" alt="canonG7X" class="image fade">
+            </div>
+            <div class="button-box">
+                <button class="prev-img arrow">Предыдущее изображение</button>
+                <button class="next-img arrow">Следующее изображение</button>
+            </div>
+        </div>
+        <div class="radio-box"></div>
+    </div>
+    <script>
+        const prew = document.querySelector('.prev-img');
+        const next = document.querySelector('.next-img');
+        const image = document.querySelectorAll('.image');
+        const radioBox = document.querySelector('.radio-box');
+
+        let currentIndex = 0;
+        const circles = [];
+
+        function createCircle() {
+            const div = document.createElement('div');
+            div.className = 'circle';
+            radioBox.appendChild(div);
+            circles.push(div);
+        }
+
+        function addCircle() {
+            image.forEach(createCircle);
+            circles[0].classList.add('active');
+            circles.forEach((radio, id) => {
+                radio.addEventListener('click', () => changeImage(index));
+            })
+        }
+
+        function addActiveClass() {
+            circles[currentIndex].classList.add('active');
+        }
+        function removeActiveClass() {
+            circles[currentIndex].classList.remove('active');
+        }
+        function showImage() {
+            image[currentIndex].classList.add('block');
+        }
+        function hideImage() {
+            image[currentIndex].classList.remove('block');
+        }
+
+        function changeImage(imageIndex) {
+            hideImage();
+            removeActiveClass();
+            currentIndex = imageIndex;
+            addActiveClass();
+            showImage();
+        }
+
+        function nextImage() {
+            let newImageIndex = currentIndex + 1;
+            if (newImageIndex > image.length -1) {
+                newImageIndex = 0;
+            }
+            changeImage(newImageIndex);
+        }
+
+        function prevImage() {
+            let newImageIndex = currentIndex - 1;
+            if (newImageIndex < 0) {
+                newImageIndex = image.length - 1;
+            }
+            changeImage(newImageIndex);
+        }
+
+        addCircle();
+        prew.addEventListener('click', prevImage);
+        next.addEventListener('click', nextImage);
+
+
+    </script>
+</body>
+</html>
